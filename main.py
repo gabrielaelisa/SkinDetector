@@ -1,17 +1,6 @@
 from headers import *
-import warnings
 
-warnings.filterwarnings('error')
 
-def suppressWarnings(func):
-    def wrapper(*args, **kwargs):
-        with warnings.catch_warnings():
-            warnings.simplefilter("ignore")
-            func(*args, **kwargs)
-
-    return wrapper
-
-@suppressWarnings
 @np.vectorize
 def exponent(num):
     try:
@@ -24,7 +13,6 @@ def P_X_skin(pixel):
     """
     :param pixel: color pixel
     """
-
 
     global iters
     iters += 1
@@ -43,20 +31,45 @@ def P_X_skin(pixel):
         C= float('inf')
     return np.sum(A*C)
 
-
-
 def P_X_no_skin(pixel):
+    global iters
+    iters += 1
+    print(iters)
+    X = np.tile(pixel, (16, 1))
+    X_u = X - mean_non_skin
+    det = np.prod(cov_non_skin_1, axis=1)
+    A = w_i_non_skin * (1 / (math.pow(math.pi * 2, 3 / 2) * det))
+    cov_inv = np.linalg.inv(cov_non_skin)
+    B = np.dot(X_u * np.diagonal(cov_inv, 0, 2, 1), X_u.transpose())
+    try:
+        C = np.vectorize(math.exp)((-1 / 2) * B)
+    except OverflowError:
+        C = float('inf')
+    return np.sum(A * C)
 
+
+"""
+def P_X_no_skin(pixel):
+    global iters
+    iters+=1
+    print(iters)
     X= np.tile(pixel, (16, 1))
-
     X_u= X-mean_non_skin
     det= np.linalg.det(cov_non_skin)
     A=  w_i_non_skin*(1/(math.pow(math.pi*2, 3/2)*det))
     #cov_inv= np.linalg.inv(cov_non_skin)
-    B= np.dot(X_u*np.diagonal(cov_inv, 0,2,1),X_u.transpose())
+    B= np.dot(X_u * cov_non_skin_1, X_u.transpose())
     C= np.vectorize(exponent)((-1 / 2) * B)
-    return np.sum(A*C)
 
+    
+    return np.sum(A*C)
+ 
+    try:
+        C = np.vectorize(math.exp)((-1 / 2) * B)
+    except OverflowError:
+        C= float('inf')
+    return np.sum(A*C)
+"""
 
 
 def classify(image, phi):
