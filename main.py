@@ -16,9 +16,9 @@ def P_X_skin(pixel):
     X_u = X - mean_skin
     det = np.prod(cov_skin, axis=1)
     A = w_i_skin * (1 / (math.pow(math.pi * 2, 3 / 2) * det))
-    B = (X_u * X_u / cov_skin)
+    B = np.sum(X_u*X_u/cov_skin, 1)
     C = np.exp((-1 / 2) * B)
-    return np.sum(np.dot(A, C))
+    return np.sum(A*C)
 
 
 def P_X_no_skin(pixel):
@@ -30,9 +30,9 @@ def P_X_no_skin(pixel):
     X_u = X - mean_non_skin
     det = np.prod(cov_non_skin, axis=1)
     A = w_i_non_skin * (1 / (math.pow(math.pi * 2, 3 / 2) * det))
-    B = (X_u * X_u / cov_non_skin)
+    B = np.sum(X_u*X_u/cov_non_skin, 1)
     C = np.exp((-1 / 2) * B)
-    return np.sum(np.dot(A, C))
+    return np.sum(A*C)
 
 
 def classify(image, phi):
