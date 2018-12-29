@@ -41,15 +41,12 @@ def classify(image, phi):
 
 if __name__ == '__main__':
     path_image = sys.argv[1]
-    phi = sys.argv[2]
-    print(float(phi))
+    phi = float(sys.argv[2])
     image = io.imread(path_image) * 1.0
     image2 = image.copy()
 
     P_skin = np.apply_along_axis(P_X_skin, 2, image)
     P_non_skin = np.apply_along_axis(P_X_no_skin, 2, image2)
     result = P_skin / P_non_skin
-    skin = classify(result, float(phi))
-    imgplot = plt.imshow(skin, cmap='gray')
-    plt.axis('off')
-    plt.show()
+    skin = classify(result, phi)
+    plt.imsave("results/image_"+ path_image[19:21] + "_" + str(phi) + ".png" , skin, cmap ='gray')
