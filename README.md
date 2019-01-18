@@ -1,4 +1,14 @@
-# DATASETs de prueba:
+# Detector de Piel:
+En este trabajo se implementa un clasificador que detecta piel  
+en imágenes, basado en 16 funciones gaussianas. Cuyos parámetros están  
+descritos en el paper "Statistical Color Models with Application to Skin Detection"  
+ de Michael J. Jones y James M. Rehg.
+
+## Resultados del algoritmo:
+![subplot](https://github.com/gabrielaelisa/SkinDetector/blob/master/results/plot.png)
+
+
+# DATASET de prueba:
 Se incluye una base de datos de 10 imágenes con sus 10 máscaras,
 las cuales fueron extraidas del dataset:
    - Pratheepan de cs-chang  disponibles públicamente
